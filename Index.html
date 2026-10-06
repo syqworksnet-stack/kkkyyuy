@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gradeo</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#ffffff;--card:#fff;--ink:#12162b;--mute:#667090;--line:#e3e6f2;--a:#6c5ce7;--b:#00b8d9;--glass:rgba(255,255,255,.72);--sh:0 8px 30px rgba(60,60,120,.08);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme="dark"]{--bg:#0d1020;--card:#171b33;--ink:#eef0fb;--mute:#9aa2c7;--line:#283050;--glass:rgba(23,27,51,.75);--sh:0 8px 30px rgba(0,0,0,.35)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.55 Outfit,system-ui,-apple-system,sans-serif}
+button,input,textarea,select{font:inherit;color:inherit}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;gap:.25rem;align-items:center;padding:.6rem .9rem;background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line);overflow-x:auto}
+nav b{font-weight:800;font-size:1.1rem;margin-right:.6rem;white-space:nowrap}
+nav button{border:0;background:transparent;padding:.45rem .8rem;border-radius:999px;cursor:pointer;white-space:nowrap;font-weight:500}
+nav button.on{background:var(--ink);color:var(--bg)}
+nav .sp{flex:1}
+main{max-width:64rem;margin:0 auto;padding:1.25rem 1rem 5rem}
+.hero{border-radius:28px;padding:clamp(1.5rem,5vw,3.5rem);background:linear-gradient(135deg,#6c5ce7,#00b8d9 70%,#7bed9f);color:#fff;box-shadow:var(--sh)}
+.hero h1{font-size:clamp(2.6rem,9vw,5rem);line-height:1;letter-spacing:-.04em;font-weight:800;margin:0 0 .6rem}
+.hero p{font-size:1.2rem;margin:0 0 1.5rem;opacity:.95}
+.btn{border:0;border-radius:999px;padding:.8rem 1.4rem;font-weight:700;cursor:pointer;background:#fff;color:#2b2470;margin:0 .5rem .5rem 0;transition:transform .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn.p{background:linear-gradient(135deg,var(--a),var(--b));color:#fff}
+h2{font-size:1.6rem;letter-spacing:-.02em;margin:2rem 0 .8rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:1.1rem;box-shadow:var(--sh)}
+.grid{display:grid;gap:.9rem;grid-template-columns:repeat(auto-fit,minmax(min(10rem,100%),1fr))}.grid.wide{grid-template-columns:repeat(auto-fit,minmax(min(17rem,100%),1fr))}
+.stat{font-size:1.9rem;font-weight:800;letter-spacing:-.03em}.stat small{display:block;font-size:.9rem;font-weight:400;color:var(--mute);letter-spacing:0}
+.bar{height:10px;border-radius:99px;background:var(--line);overflow:hidden;margin:.35rem 0 .8rem}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--c,var(--a));transition:width .6s}
+.row{display:flex;justify-content:space-between;gap:.5rem}
+.sub{cursor:pointer;border-top:6px solid var(--c);position:relative;text-align:left}
+.sub .e{font-size:2rem}.sub h3{margin:.2rem 0}
+.x{position:absolute;top:.4rem;right:.5rem;border:0;background:transparent;color:var(--mute);cursor:pointer;font-size:1rem}
+.chip{border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:.4rem .85rem;cursor:pointer;margin:0 .35rem .4rem 0}
+.chip:hover,.chip.on{border-color:var(--a);background:color-mix(in srgb,var(--a) 14%,transparent)}
+.topic{margin-bottom:.8rem}.topic h3{margin:0 0 .5rem}
+.acts{display:flex;flex-wrap:wrap;gap:.4rem}
+.acts button{border:0;border-radius:12px;padding:.45rem .75rem;cursor:pointer;background:color-mix(in srgb,var(--c) 16%,transparent)}
+.acts button.d{background:var(--c);color:#fff}
+textarea,input[type=text],input[type=number],input[type=password],select{width:100%;padding:.65rem .8rem;border-radius:14px;border:1.5px solid var(--line);background:var(--bg)}
+.chat{display:flex;flex-direction:column;gap:.7rem;min-height:40vh;max-height:min(60dvh,36rem);overflow-y:auto;padding:.3rem}
+.m{max-width:85%;padding:.7rem 1rem;border-radius:20px;white-space:normal;word-wrap:break-word}
+.m.u{align-self:flex-end;background:linear-gradient(135deg,var(--a),var(--b));color:#fff;border-bottom-right-radius:6px}
+.m.s{align-self:flex-start;background:var(--bg);border:1px solid var(--line);border-bottom-left-radius:6px}
+.in{display:flex;gap:.5rem;margin-top:.8rem}.in input{flex:1}
+.ach{opacity:.45;filter:grayscale(1)}.ach.on{opacity:1;filter:none}
+.toast{position:fixed;left:50%;bottom:calc(1.2rem + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:.7rem 1.2rem;border-radius:999px;z-index:9}
+.mute{color:var(--mute)}
+input,select,textarea{font-size:16px}
+nav button,.chip,.acts button,.btn{min-height:44px}
+main{padding-left:max(1rem,env(safe-area-inset-left));padding-right:max(1rem,env(safe-area-inset-right))}
+@media (max-width:600px){.m{max-width:94%}.hero{border-radius:22px}.btn{padding:.75rem 1.1rem}nav{padding:.5rem .6rem}}
+@media (min-width:1100px){main{max-width:74rem}}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--a);outline-offset:2px}
+.fade{animation:f .35s ease}@keyframes f{from{opacity:0;transform:translateY(8px)}}
+@media (prefers-reduced-motion:reduce){.fade{animation:none}.bar i,.btn{transition:none}}
+</style>
+</head>
+<body>
+<nav id="nav"></nav>
+<main id="v"></main>
+<script>
+const SUBJ=[
+["maths","🧮","Mathematics",1,"Number|Algebra|Ratio & Proportion|Geometry|Probability|Statistics|Graphs|Trigonometry"],
+["lang","📖","English Language",1,"Reading fiction|Reading non-fiction|Creative writing|Transactional writing|Spelling, punctuation & grammar"],
+["lit","📚","English Literature",1,"Macbeth|An Inspector Calls|A Christmas Carol|Poetry anthology|Unseen poetry"],
+["sci","🧪","Combined Science",1,"Cells|Atomic structure|Forces|Energy|Ecology|Bonding"],
+["bio","🧬","Biology",1,"Cell biology|Organisation|Infection & response|Bioenergetics|Homeostasis|Inheritance|Ecology"],
+["chem","⚗️","Chemistry",1,"Atomic structure|Bonding|Quantitative chemistry|Chemical changes|Energy changes|Rates of reaction|Organic chemistry"],
+["phys","⚛️","Physics",1,"Energy|Electricity|Particle model|Atomic structure|Forces|Waves|Magnetism"],
+["geo","🌍","Geography",0,"Natural hazards|Rivers|Coasts|Urban issues|Economic world|Resource management"],
+["hist","🏛️","History",0,"Medicine through time|Weimar & Nazi Germany|Cold War|Elizabethan England|Norman England"],
+["cs","💻","Computer Science",0,"Algorithms|Programming|Data representation|Networks|Cyber security|Computer systems"],
+["fr","🇫🇷","French",0,"Identity & culture|Local area|Travel|School|Future plans"],
+["es","🇪🇸","Spanish",0,"Identity & culture|Local area|Travel|School|Future plans"],
+["art","🎨","Art & Design",0,"Drawing|Colour & media|Artist research|Developing ideas|Final piece"],
+["mus","🎵","Music",0,"Rhythm & metre|Harmony|Set works|Composition|Listening"],
+["pe","🏃","PE",0,"Anatomy & physiology|Movement analysis|Training|Sport psychology|Health & fitness"],
+["bus","💼","Business",0,"Enterprise|Marketing|Finance|Operations|Human resources"],
+["psy","🧠","Psychology",0,"Memory|Perception|Development|Social influence|Research methods"],
+["rs","⚖️","Religious Studies",0,"Beliefs|Practices|Ethics|Philosophy|Relationships"]];
+const AWARDS=[["quiz","🏆","First Quiz"],["streak","🔥","7 Day Streak"],["q100","🧠","100 Questions Answered"],["ready","🎓","GCSE Ready"],["perfect","💯","Perfect Score"]];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const md=t=>esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/\n/g,"<br>");
+const today=()=>new Date().toISOString().slice(0,10);
+const col=i=>`hsl(${(i*47+250)%360} 75% 58%)`;
+let S=null,U=null,mem={};
+const st={get:k=>{try{return localStorage.getItem(k)}catch(e){return mem[k]??null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){mem[k]=v}}};
+function save(){if(U)st.set("gx_s_"+U,JSON.stringify(S))}
+function begin(name){U=name.toLowerCase();S={name,sel:SUBJ.filter(s=>s[3]).map(s=>s[0]),xp:0,streak:0,day:"",q:0,ach:{},prog:{},done:{},notes:{},mins:0};try{Object.assign(S,JSON.parse(st.get("gx_s_"+U)||"{}"))}catch(e){}S.name=name;const t=today();if(S.day!==t){const y=new Date(Date.now()-864e5).toISOString().slice(0,10);S.streak=S.day===y?S.streak+1:1;S.day=t}if(S.streak>=7)S.ach.streak=1;st.set("gx_cur",name);applyTheme();save()}
+function toast(t){const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2600)}
+function xp(n){S.xp+=n;save()}
+function unlock(k){if(!S.ach[k]){S.ach[k]=1;const a=AWARDS.find(x=>x[0]===k);toast(a[1]+" Achievement unlocked: "+a[2]);xp(50)}}
+const sub=id=>SUBJ.find(s=>s[0]===id);
+const idx=id=>SUBJ.findIndex(s=>s[0]===id);
+const pr=id=>S.prog[id]||0;
+let view="home",arg=null,msgs=[],exam=false,sample=null,busy=false;
+const NAV=[["home","Home"],["subjects","Subjects"],["study","Study ⏱️"],["buddy","Nova"],["planner","Planner"],["awards","Awards"],["settings","Settings"]];
+function go(v,a){smsg="";conf="";view=v;arg=a||null;render();window.scrollTo(0,0)}
+function render(){
+  if(!S){authView();return}
+  $("#nav").innerHTML="<b>📚 Gradeo</b>"+NAV.map(n=>`<button class="${view===n[0]||(view==="subject"&&n[0]==="subjects")?"on":""}" onclick="go('${n[0]}')">${n[1]}</button>`).join("")+`<span class="sp"></span><button onclick="theme()" aria-label="Toggle dark mode">🌗</button><button onclick="logout()">Log out</button>`;
+  const v=$("#v");v.className="";v.innerHTML=({home,subjects,subject,buddy,planner,awards,quiz,study,settings})[view]();void v.offsetWidth;v.className="fade";if(view==="buddy")scrollChat();if(view==="study")tdraw();
+}
+function theme(){const r=document.documentElement,n=r.dataset.theme==="dark"?"light":"dark";r.dataset.theme=n;if(S){S.theme=n;save()}}
+function applyTheme(){const t=S&&S.theme||"light";document.documentElement.dataset.theme=t==="auto"?(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light"):t}
+function home(){
+  const lvl=Math.floor(S.xp/500)+1,goal=Math.min(100,Math.round(S.mins/(S.goal||325)*100)),h=Math.floor(S.mins/60);
+  return `<div class="hero"><h1>GCSEs made easier.</h1><p>Learn it. Understand it. Remember it.</p>
+  <button class="btn" onclick="go('study')">Start Studying →</button><button class="btn p" onclick="go('buddy')">Ask Nova</button></div>
+  <h2>Welcome back, ${esc(S.name)} 👋</h2>
+  <div class="grid"><div class="card stat">🔥 ${S.streak}<small>day study streak</small></div><div class="card stat">⏱️ ${h}h ${S.mins%60}m<small>studied this week</small></div><div class="card stat">🎯 ${goal}%<small>weekly goal</small></div><div class="card stat">🏆 ${S.xp.toLocaleString("en-GB")}<small>XP · Level ${lvl}</small></div></div>
+  <h2>Your GCSE progress</h2><div class="card">${S.sel.slice(0,6).map(id=>bar(id)).join("")||"<span class=mute>Add subjects to see progress.</span>"}</div>`;
+}
+const bar=id=>{const s=sub(id);return `<div class="row"><span>${s[1]} ${s[2]}</span><b>${pr(id)}%</b></div><div class="bar" style="--c:${col(idx(id))}"><i style="width:${pr(id)}%"></i></div>`};
+function subjects(){
+  return `<h2 style="margin-top:.5rem">Your subjects</h2><div class="grid">${S.sel.map(id=>{const s=sub(id);return `<div class="card sub" style="--c:${col(idx(id))}" onclick="go('subject','${id}')"><button class="x" aria-label="Remove ${s[2]}" onclick="event.stopPropagation();rm('${id}')">✕</button><div class="e">${s[1]}</div><h3>${s[2]}</h3>${bar(id)}</div>`}).join("")}</div>
+  <h2>Add a subject</h2>${SUBJ.filter(s=>!S.sel.includes(s[0])).map(s=>`<button class="chip" onclick="add('${s[0]}')">${s[1]} ${s[2]} +</button>`).join("")||"<span class=mute>You've added them all.</span>"}`;
+}
+
+const BAD=["fuck","shit","bitch","cunt","nigg","fagg","retard","whore","slut","asshole","bastard","twat","wank","pussy","chink","tranny","rapist","pedo","nazi","hitler"];
+const BADW=["dick","cock","piss","paki","coon","rape","kike","spic","fag","nig","sex","porn","ass","arse","tit","tits","cum","anus"];
+function clean(n){const l=n.toLowerCase().replace(/[@4]/g,"a").replace(/3/g,"e").replace(/[1!|]/g,"i").replace(/0/g,"o").replace(/[$5]/g,"s").replace(/7/g,"t");return !BAD.some(b=>l.replace(/[^a-z]/g,"").includes(b))&&!BADW.some(b=>l.split(/[^a-z]+/).includes(b))}
+async function hash(p,salt){try{const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(salt+p));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}catch(e){let h=0;for(const c of salt+p)h=(h*31+c.charCodeAt(0))|0;return "x"+h}}
+let tab="in",aerr="",fp=null;
+const norm=x=>String(x||"").trim().toLowerCase().replace(/\s+/g," ");
+function authView(){
+  $("#nav").innerHTML='<b>📚 Gradeo</b><span class="sp"></span><button onclick="theme()" aria-label="Toggle dark mode">🌗</button>';
+  const tb=(t,l)=>`<button class="chip ${tab===t?"on":""}" onclick="tab='${t}';aerr='';fp=null;render()">${l}</button>`;
+  const err=`<p role="alert" style="color:${aerr.startsWith("✅")?"#00a37a":"#d63031"};min-height:1.5em">${esc(aerr)}</p>`;
+  const back=`<button type="button" class="chip" onclick="tab='in';aerr='';fp=null;render()">Back</button>`;
+  let body;
+  if(tab==="fp"&&!fp)body=`<h3 style="margin-top:0">Forgot password</h3><form onsubmit="event.preventDefault();fpNext(this)"><label>Username<input type="text" name="u" maxlength="16" autocomplete="username" required></label>${err}<button class="btn p" style="margin:0 .5rem 0 0">Next</button>${back}</form>`;
+  else if(tab==="fp")body=`<h3 style="margin-top:0">Forgot password</h3><p>Your question: <b>${esc(fp.q)}</b></p><form onsubmit="event.preventDefault();fpReset(this)"><label>Your answer<input type="text" name="a" autocomplete="off" required></label><br><br><label>New password<input type="password" name="n" autocomplete="new-password" required></label>${err}<button class="btn p" style="margin:0 .5rem 0 0">Reset password</button>${back}</form>`;
+  else body=`<form onsubmit="event.preventDefault();auth(this)"><label>Username<input type="text" name="u" maxlength="16" autocomplete="username" required></label><br><br><label>Password<input type="password" name="p" autocomplete="${tab==="in"?"current-password":"new-password"}" required></label>${tab==="up"?`<br><br><label>Make a security question<input type="text" name="q" maxlength="80" placeholder="e.g. What was my first pet's name?" autocomplete="off" required></label><br><br><label>Answer to your question<input type="text" name="a" maxlength="60" autocomplete="off" required></label><p class="mute" style="margin:.4rem 0 0">Capital letters don't matter. You'll need this if you forget your password.</p>`:""}${err}<button class="btn p" style="margin:0">${tab==="in"?"Log in":"Create my account"}</button>${tab==="in"?`<p><button type="button" class="chip" onclick="tab='fp';aerr='';render()">Forgot password?</button></p>`:""}<p class="mute">Your account is saved on this device only.</p></form>`;
+  $("#v").innerHTML=`<div class="hero"><h1>GCSEs made easier.</h1><p>Learn it. Understand it. Remember it.</p></div><div class="card" style="max-width:26rem;margin:1.2rem auto"><div>${tb("in","Log in")}${tb("up","Create account")}</div>${body}</div>`;
+}
+function getUsers(){try{return JSON.parse(st.get("gx_users")||"{}")}catch(e){return {}}}
+function fpNext(f){const k=f.u.value.trim().toLowerCase(),u=getUsers()[k];aerr="";
+  if(!u)aerr="No account with that username.";
+  else if(!u.q)aerr="This account has no security question, so it can't be reset.";
+  else fp={k,q:u.q,tries:0};
+  render()}
+async function fpReset(f){
+  const users=getUsers(),u=users[fp.k];aerr="";
+  if(fp.tries>=5)aerr="Too many wrong answers. Go back and try again later.";
+  else if(f.n.value.length<4)aerr="Your new password needs at least 4 characters.";
+  else if(u.ah!==await hash(norm(f.a.value),u.as)){fp.tries++;aerr="That answer isn't right."}
+  else{u.salt=Math.random().toString(36).slice(2);u.h=await hash(f.n.value,u.salt);st.set("gx_users",JSON.stringify(users));fp=null;tab="in";aerr="✅ Password changed. Log in with your new password."}
+  render()}
+async function auth(f){
+  const n=f.u.value.trim(),p=f.p.value,k=n.toLowerCase();let users={};try{users=JSON.parse(st.get("gx_users")||"{}")}catch(e){}
+  aerr="";
+  if(tab==="up"){
+    if(!/^[A-Za-z0-9_.-]{3,16}$/.test(n))aerr="Use 3 to 16 letters, numbers, _ . or -";
+    else if(!clean(n))aerr="Please pick a friendly username without rude or offensive words.";
+    else if(p.length<4)aerr="Your password needs at least 4 characters.";
+    else if(users[k])aerr="That username is taken. Try another.";
+    else if(f.q.value.trim().length<3)aerr="Make a security question (at least 3 characters).";
+    else if(!norm(f.a.value))aerr="Add an answer to your security question.";
+    else{const salt=Math.random().toString(36).slice(2),as=Math.random().toString(36).slice(2);users[k]={n,salt,h:await hash(p,salt),q:f.q.value.trim(),as,ah:await hash(norm(f.a.value),as)};st.set("gx_users",JSON.stringify(users))}
+  }else{const u=users[k];if(!u||u.h!==await hash(p,u.salt))aerr="Wrong username or password."}
+  if(aerr){render();return}
+  begin(tab==="up"?n:users[k].n);view="home";render();
+}
+function logout(){fp=null;tab="in";document.documentElement.dataset.theme="light";clearInterval(T.id);T.run=false;S=null;U=null;st.set("gx_cur","");msgs=[];Q=null;view="home";render()}
+const BANK=[
+["maths","Number","What is 3/4 of 80?","60|20|64|40",0,"80 ÷ 4 = 20, then 20 × 3 = 60."],
+["maths","Number","Which is 360 written as a product of prime factors?","2³ × 3² × 5|2² × 3² × 10|2³ × 3 × 15|2 × 3² × 5²",0,"360 = 8 × 9 × 5, and 8, 9 and 5 break down into primes only as 2³ × 3² × 5."],
+["maths","Algebra","Solve 3x + 5 = 20.","x = 5|x = 25/3|x = 15|x = 8",0,"Take 5 off both sides to get 3x = 15, then divide by 3."],
+["maths","Algebra","Expand and simplify (x + 3)(x + 2).","x² + 5x + 6|x² + 6|x² + 5x + 5|2x + 5",0,"x·x + 2x + 3x + 6 = x² + 5x + 6."],
+["maths","Ratio & Proportion","Share £60 in the ratio 2 : 3. How much is the bigger share?","£36|£24|£30|£40",0,"2 + 3 = 5 parts, so 1 part is £12 and 3 parts is £36."],
+["maths","Geometry","What do the angles in a triangle add up to?","180°|360°|90°|270°",0,"Angles in any triangle always total 180°."],
+["maths","Probability","What is the probability of rolling a 5 on a fair dice?","1/6|1/5|5/6|1/2",0,"One face out of six faces is a 5."],
+["maths","Statistics","What is the mean of 2, 4, 6 and 8?","5|6|4|20",0,"Total is 20, divided by 4 numbers gives 5."],
+["maths","Graphs","What is the gradient of y = 3x + 2?","3|2|5|1/3",0,"In y = mx + c, the gradient is m, the number in front of x."],
+["maths","Trigonometry","In a right-angled triangle, sin θ equals…","opposite ÷ hypotenuse|adjacent ÷ hypotenuse|opposite ÷ adjacent|hypotenuse ÷ opposite",0,"SOH: Sine = Opposite over Hypotenuse."],
+["bio","Cell biology","Which part of a cell controls its activities?","Nucleus|Cell wall|Ribosome|Vacuole",0,"The nucleus holds the DNA, which is the cell's instructions."],
+["bio","Cell biology","Particles spreading from a high to a low concentration is called…","Diffusion|Osmosis|Active transport|Respiration",0,"Diffusion is the net movement of particles down a concentration gradient."],
+["bio","Organisation","Which enzyme breaks down starch?","Amylase|Protease|Lipase|Bile",0,"Amylase turns starch into sugars. Protease does proteins and lipase does fats."],
+["bio","Bioenergetics","Which are the reactants of photosynthesis?","Carbon dioxide and water|Oxygen and glucose|Glucose and water|Carbon dioxide and oxygen",0,"Plants use light to turn carbon dioxide and water into glucose and oxygen."],
+["bio","Homeostasis","Which hormone lowers blood glucose?","Insulin|Glucagon|Adrenaline|Thyroxine",0,"Insulin tells cells to take in glucose. Glucagon raises it."],
+["bio","Inheritance","What is the genotype Bb called?","Heterozygous|Homozygous dominant|Homozygous recessive|Mutant",0,"Two different alleles means heterozygous."],
+["bio","Infection & response","Which white blood cells make antibodies?","Lymphocytes|Red blood cells|Platelets|Phagocytes",0,"Lymphocytes make antibodies. Phagocytes engulf pathogens."],
+["chem","Atomic structure","Which particle has a negative charge?","Electron|Proton|Neutron|Nucleus",0,"Electrons are negative, protons positive and neutrons neutral."],
+["chem","Atomic structure","The atomic number tells you the number of…","Protons|Neutrons|Neutrons and electrons|Shells",0,"The atomic number is the number of protons."],
+["chem","Bonding","Bonding between a metal and a non-metal is usually…","Ionic|Covalent|Metallic|Hydrogen",0,"The metal gives electrons to the non-metal, making ions that attract."],
+["chem","Chemical changes","What is the pH of a neutral solution?","7|0|14|1",0,"Below 7 is acid, above 7 is alkali, and 7 is neutral."],
+["chem","Energy changes","A reaction that gives out heat to the surroundings is…","Exothermic|Endothermic|Neutral|Reversible",0,"Exothermic: heat exits. Endothermic: heat enters."],
+["chem","Quantitative chemistry","What is the relative formula mass of H₂O? (H = 1, O = 16)","18|17|16|2",0,"2 × 1 + 16 = 18."],
+["chem","Organic chemistry","Which is the first alkane?","Methane|Ethane|Ethene|Methanol",0,"Methane has one carbon, then ethane has two."],
+["phys","Forces","What is the unit of force?","Newton|Joule|Watt|Pascal",0,"Force is measured in newtons (N)."],
+["phys","Forces","How do you calculate speed?","Distance ÷ time|Time ÷ distance|Distance × time|Mass × acceleration",0,"Speed = distance ÷ time."],
+["phys","Energy","What happens to energy in a closed system?","Transferred, never created or destroyed|Created|Destroyed|Used up",0,"Energy is conserved. It only changes how it is stored or moves."],
+["phys","Electricity","Which equation links potential difference, current and resistance?","V = I × R|V = I ÷ R|V = R ÷ I|V = I + R",0,"Potential difference = current × resistance."],
+["phys","Waves","Which has the longest wavelength?","Radio waves|Gamma rays|X-rays|Ultraviolet",0,"Radio waves are at the long end of the electromagnetic spectrum."],
+["phys","Atomic structure","An alpha particle is the same as…","A helium nucleus|An electron|A neutron|A photon",0,"It is 2 protons and 2 neutrons, just like helium's nucleus."],
+["phys","Particle model","How do you calculate density?","Mass ÷ volume|Volume ÷ mass|Mass × volume|Force ÷ area",0,"Density = mass ÷ volume."],
+["hist","Cold War","In which year was the Berlin Wall built?","1961|1945|1989|1953",0,"It went up in 1961 and came down in 1989."],
+["hist","Medicine through time","Who discovered penicillin?","Alexander Fleming|Edward Jenner|Louis Pasteur|Joseph Lister",0,"Fleming noticed mould killing bacteria in 1928."],
+["hist","Weimar & Nazi Germany","When did Hitler become Chancellor?","1933|1923|1939|1929",0,"Hindenburg appointed him in January 1933."],
+["hist","Norman England","In which year was the Battle of Hastings?","1066|1215|1088|1000",0,"William of Normandy beat Harold in 1066."],
+["cs","Algorithms","What is an algorithm?","Step-by-step instructions to solve a problem|A type of computer|A program error|A storage device",0,"It is a set of clear steps, like a recipe."],
+["cs","Data representation","How many bits are in a byte?","8|4|16|2",0,"One byte is 8 bits."],
+["cs","Cyber security","What is phishing?","Fake messages that trick you into giving details|A computer virus|A firewall|A backup",0,"Phishing pretends to be someone trustworthy to steal information."],
+["cs","Computer systems","Which part is the 'brain' of a computer?","CPU|RAM|SSD|Monitor",0,"The CPU fetches, decodes and executes instructions."],
+["geo","Rivers","What is the start of a river called?","Source|Mouth|Meander|Confluence",0,"The source is where it begins and the mouth is where it ends."],
+["geo","Natural hazards","At which plate boundary do plates move towards each other?","Destructive|Constructive|Conservative|Passive",0,"Destructive boundaries are where plates collide."]];
+const bank=id=>BANK.filter(q=>id==="sci"?["bio","chem","phys"].includes(q[0]):q[0]===id);
+const shuf=a=>a.map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+let Q=null;
+function quizT(id,i){
+  let pool=bank(id);if(!pool.length){ask(id,i||0,"quiz");return}
+  const tn=i==null?null:sub(id)[4].split("|")[i],tp=tn?pool.filter(q=>q[1]===tn):[];if(tp.length>=2)pool=tp;
+  Q={id,list:shuf(pool).slice(0,10).map(q=>({t:q[1],q:q[2],o:shuf(q[3].split("|").map((t,j)=>({t,c:j===q[4]}))),w:q[5]})),i:0,sc:0,miss:[],pick:null};
+  unlock("quiz");go("quiz");
+}
+function pick(i){
+  const q=Q.list[Q.i],n=Q.list.length;Q.pick=i;
+  if(q.o[i].c){Q.sc++;xp(10);S.prog[Q.id]=Math.min(100,pr(Q.id)+2)}else Q.miss.push(q.t);
+  S.q++;S.mins+=1;if(S.q>=100)unlock("q100");
+  if(Q.i+1>=n&&Q.sc===n)unlock("perfect");
+  save();render();
+}
+function quiz(){
+  if(!Q)return subjects();
+  const s=sub(Q.id),c=col(idx(Q.id)),n=Q.list.length;
+  if(Q.i>=n){
+    const p=Math.round(Q.sc/n*100),g=p>=90?9:p>=80?8:p>=70?7:p>=60?6:p>=50?5:p>=40?4:p>=30?3:p>=20?2:1,m=[...new Set(Q.miss)];
+    return `<h2 style="margin-top:.5rem">Quiz complete 🎉</h2><div class="card"><div class="stat">Score: ${Q.sc}/${n}<small>Grade estimate: ${g}</small></div><p><b>Topics to revise:</b></p>${m.length?"<ul>"+m.map(t=>`<li>${esc(t)}</li>`).join("")+"</ul>":"<p>Nothing! Brilliant work 💯</p>"}<button class="btn p" onclick="quizT('${Q.id}')">Try again</button><button class="chip" onclick="go('subject','${Q.id}')">Back to ${s[2]}</button></div>`;
+  }
+  const q=Q.list[Q.i],d=Q.pick!=null;
+  return `<button class="chip" onclick="go('subject','${Q.id}')">← ${s[2]}</button><h2>Question ${Q.i+1} of ${n}</h2><div class="card"><div class="bar" style="--c:${c}"><i style="width:${Q.i/n*100}%"></i></div><p class="mute">${esc(q.t)}</p><h3 style="margin-top:0">${esc(q.q)}</h3>${q.o.map((o,i)=>`<button class="chip" style="display:block;width:100%;text-align:left;border-radius:14px;${d&&o.c?"border-color:#00b894;background:#00b89422":d&&i===Q.pick?"border-color:#d63031;background:#d6303122":""}" ${d?"disabled":""} onclick="pick(${i})">${esc(o.t)}</button>`).join("")}${d?`<p>${q.o[Q.pick].c?"✅ Correct!":"❌ Not quite!"} ${esc(q.w)}</p><button class="btn p" style="margin:0" onclick="Q.i++;Q.pick=null;render()">${Q.i+1>=n?"See my score":"Next →"}</button>`:""}</div>`;
+}
+
+const PRE=[["Pomodoro",25,5],["Short sprint",15,3],["52/17",52,17],["Deep work",90,20]];
+const METH=[
+["Active recall","Test yourself instead of rereading. Best for facts, definitions and formulas.",["Close your notes and say or write all you remember.","Open them and mark what you missed.","Repeat on the gaps only."],0],
+["Spaced repetition","Review the same material at growing gaps so it sticks.",["Study it today.","Review after 1 day, 3 days, 7 days, then 3 weeks.","Give easy cards a longer gap."],1],
+["Feynman technique","Explain the topic in plain words, as if teaching a beginner.",["Write the topic at the top of a blank page.","Explain it without jargon.","Where you get stuck, go back and fix it."],0],
+["Blurting","Dump everything you know onto a blank page, then check it.",["Write all you know for 5 minutes.","Check against your notes in a different colour.","Next round, focus on what you missed."],1],
+["Interleaving","Mix different topics in one sitting instead of one at a time.",["Pick 3 topics.","Switch every 10 to 15 minutes.","Give extra time to the one you avoid."],2],
+["Timed practice papers","Do past questions under exam conditions, then mark honestly.",["Set the timer to the real exam length.","Answer without notes.","Redo every question you lost marks on."],3]];
+let T={mode:"focus",f:25,b:5,total:1500,left:1500,run:false,end:0,id:null,p:0,sub:""};
+const fmt=n=>String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0");
+function tdraw(){const c=$("#clk");if(!c||!S)return;c.textContent=fmt(T.left);$("#fill").style.width=(1-T.left/T.total)*100+"%";$("#tst").textContent=(T.mode==="focus"?"Focus time":"Break time")+(T.run?"":" · paused");$("#go").textContent=T.run?"Pause":"Start";$("#sc").textContent="Sessions done: "+(S.sess||0)}
+function tload(m){T.mode=m;T.total=T.left=(m==="focus"?T.f:T.b)*60;clearInterval(T.id);T.run=false;tdraw()}
+function tgo(){if(T.run){clearInterval(T.id);T.run=false;tdraw();return}T.run=true;T.end=Date.now()+T.left*1000;T.id=setInterval(tstep,250);tdraw()}
+function beep(){if(S&&S.sound===false)return;try{const c=new (window.AudioContext||window.webkitAudioContext)();[0,.25,.5].forEach(t=>{const o=c.createOscillator(),g=c.createGain();o.frequency.value=660;g.gain.value=.15;o.connect(g);g.connect(c.destination);o.start(c.currentTime+t);o.stop(c.currentTime+t+.15)})}catch(e){}}
+function tstep(){
+  T.left=Math.max(0,Math.round((T.end-Date.now())/1000));
+  if(T.left>0){tdraw();return}
+  beep();
+  if(T.mode==="focus"){S.mins+=T.f;S.sess=(S.sess||0)+1;if(T.sub)S.prog[T.sub]=Math.min(100,pr(T.sub)+3);xp(20);toast("Session done! +20 XP 🎉")}
+  tload(T.mode==="focus"?"break":"focus");
+}
+function setPre(i){T.p=i;T.f=PRE[i][1];T.b=PRE[i][2];tload("focus");render()}
+function study(){
+  const o=S.sel.map(id=>`<option value="${id}" ${T.sub===id?"selected":""}>${sub(id)[1]} ${sub(id)[2]}</option>`).join("");
+  return `<h2 style="margin-top:.5rem">Study ⏱️</h2><div class="card">${PRE.map((p,i)=>`<button class="chip ${T.p===i?"on":""}" onclick="setPre(${i})">${p[0]} ${p[1]}/${p[2]}</button>`).join("")}
+  <p class="mute" id="tst" style="margin:.6rem 0 0"></p><div id="clk" role="timer" style="font-size:clamp(4rem,20vw,7.5rem);font-weight:800;letter-spacing:-.05em;line-height:1;font-variant-numeric:tabular-nums"></div><div class="bar"><i id="fill"></i></div>
+  <button class="btn p" id="go" onclick="tgo()" style="margin:0 .5rem .5rem 0"></button><button class="chip" onclick="tload(T.mode)">Reset</button><button class="chip" onclick="tload(T.mode==='focus'?'break':'focus')">Skip</button>
+  <label style="display:block;margin-top:.8rem">What are you studying?<select onchange="T.sub=this.value"><option value="">Anything</option>${o}</select></label>
+  <div style="display:flex;flex-wrap:wrap;gap:.8rem;margin-top:.8rem;align-items:center"><label>Focus <input type="number" min="1" max="180" value="${T.f}" style="width:5rem;display:inline-block" onchange="T.f=Math.max(1,+this.value||25);T.p=-1;tload(T.mode)"> min</label><label>Break <input type="number" min="1" max="60" value="${T.b}" style="width:5rem;display:inline-block" onchange="T.b=Math.max(1,+this.value||5);T.p=-1;tload(T.mode)"> min</label><span class="mute" id="sc"></span></div>
+  <p class="mute" style="margin-bottom:0">Finish a focus session to earn 20 XP and boost your subject's progress.</p></div>
+  <h2>Study methods</h2><div class="grid wide">${METH.map(m=>`<div class="card"><h3 style="margin:0">${m[0]}</h3><p class="mute">${m[1]}</p><ol style="padding-left:1.2rem">${m[2].map(x=>`<li>${x}</li>`).join("")}</ol><button class="chip" onclick="setPre(${m[3]});window.scrollTo(0,0)">Use ${PRE[m[3]][1]}/${PRE[m[3]][2]} timer</button></div>`).join("")}</div>`;
+}
+
+let conf="",smsg="";
+function settings(){
+  const th=S.theme||"light";
+  return `<h2 style="margin-top:.5rem">Settings</h2>
+  <div class="card"><h3 style="margin-top:0">Account</h3><p>Username: <b>${esc(S.name)}</b></p>
+  <form onsubmit="event.preventDefault();chpw(this)"><label>Current password<input type="password" name="c" autocomplete="current-password" required></label><br><br><label>New password<input type="password" name="n" autocomplete="new-password" required></label><br><br><label>Confirm new password<input type="password" name="m" autocomplete="new-password" required></label><p role="status" style="min-height:1.5em;color:${smsg.startsWith("✅")?"#00a37a":"#d63031"}">${esc(smsg)}</p><button class="btn p" style="margin:0">Change password</button></form></div>
+  <div class="card" style="margin-top:1rem"><h3 style="margin-top:0">Appearance</h3>${[["light","Light"],["dark","Dark"],["auto","Match my device"]].map(t=>`<button class="chip ${th===t[0]?"on":""}" onclick="setTheme('${t[0]}')">${t[1]}</button>`).join("")}</div>
+  <div class="card" style="margin-top:1rem"><h3 style="margin-top:0">Studying</h3><label><input type="checkbox" ${S.sound!==false?"checked":""} onchange="S.sound=this.checked;save()"> Play a sound when the timer ends</label><br><br><label>Weekly study goal (minutes)<input type="number" min="30" max="3000" value="${S.goal||325}" onchange="S.goal=Math.max(30,+this.value||325);save()"></label></div>
+  <div class="card" style="margin-top:1rem"><h3 style="margin-top:0">Your data</h3><p class="mute">Your account and progress are saved on this device only.</p><button class="chip" onclick="confirmAct('reset')">${conf==="reset"?"Tap again to erase all progress":"Reset my progress"}</button><button class="chip" onclick="confirmAct('del')">${conf==="del"?"Tap again to delete my account":"Delete my account"}</button></div>
+  <p><button class="btn p" onclick="logout()">Log out</button></p>`;
+}
+function setTheme(t){S.theme=t;save();applyTheme();render()}
+function confirmAct(k){
+  if(conf!==k){conf=k;render();setTimeout(()=>{if(conf===k){conf="";if(view==="settings")render()}},4000);return}
+  conf="";
+  if(k==="reset"){Object.assign(S,{xp:0,streak:1,q:0,ach:{},prog:{},done:{},notes:{},mins:0,sess:0});save();toast("Progress reset");render();return}
+  let users={};try{users=JSON.parse(st.get("gx_users")||"{}")}catch(e){}
+  delete users[U];st.set("gx_users",JSON.stringify(users));st.set("gx_s_"+U,"");logout();
+}
+async function chpw(f){
+  let users={};try{users=JSON.parse(st.get("gx_users")||"{}")}catch(e){}
+  const u=users[U];smsg="";
+  if(!u||u.h!==await hash(f.c.value,u.salt))smsg="Your current password is wrong.";
+  else if(f.n.value.length<4)smsg="Your new password needs at least 4 characters.";
+  else if(f.n.value!==f.m.value)smsg="The new passwords don't match.";
+  else{u.salt=Math.random().toString(36).slice(2);u.h=await hash(f.n.value,u.salt);st.set("gx_users",JSON.stringify(users));smsg="✅ Password changed."}
+  render();
+}
+function add(id){S.sel.push(id);save();render()}
+function rm(id){S.sel=S.sel.filter(x=>x!==id);save();render()}
+function subject(){
+  const s=sub(arg),c=col(idx(arg));
+  return `<button class="chip" onclick="go('subjects')">← Subjects</button><h2 style="margin-top:.4rem">${s[1]} GCSE ${s[2]}</h2>
+  <div class="card" style="--c:${c}">Progress: <b>${pr(arg)}%</b><div class="bar" style="--c:${c}"><i style="width:${pr(arg)}%"></i></div><button class="btn p" style="margin:0" onclick="quizT('${arg}')">📝 Take a quiz</button></div><h2>Topics</h2>
+  ${s[4].split("|").map((t,i)=>{const k=arg+i,dn=S.done[k];return `<div class="card topic" style="--c:${c}"><h3>${esc(t)} ${dn?"✅":""}</h3><div class="acts">
+  <button onclick="ask('${arg}',${i},'learn')">📖 Learn</button><button onclick="ask('${arg}',${i},'cards')">🧠 Flashcards</button><button onclick="ask('${arg}',${i},'practice')">✏️ Practice questions</button><button onclick="quizT('${arg}',${i})">📝 Quiz</button><button onclick="ask('${arg}',${i},'ask')">Ask Nova</button>${dn?"":`<button class="d" onclick="finish('${arg}',${i})">Mark done +15 XP</button>`}</div>
+  <details style="margin-top:.7rem"><summary>My notes</summary><textarea rows="3" placeholder="Write your notes here…" onchange="S.notes['${k}']=this.value;save()">${esc(S.notes[k]||"")}</textarea></details></div>`}).join("")}`;
+}
+function finish(id,i){S.done[id+i]=1;S.prog[id]=Math.min(100,pr(id)+Math.ceil(100/sub(id)[4].split("|").length));xp(15);render()}
+function ask(id,i,kind){
+  const s=sub(id),t=s[4].split("|")[i],b=`GCSE ${s[2]} — ${t}`;
+  const P={learn:`Teach me ${b} simply, then list the 5 key facts to remember.`,cards:`Make 6 flashcards for ${b}. Show Q and A for each.`,practice:`Give me GCSE-style practice questions on ${b}, one at a time, and mark each answer.`,quiz:`Quiz me on ${b}. One question at a time, 10 questions.`,ask:`I'd like to ask about ${b}.`}[kind];
+  if(kind==="quiz")unlock("quiz");if(kind!=="ask"&&kind!=="quiz"){S.prog[id]=Math.min(100,pr(id)+2);save()}
+  go("buddy");if(kind!=="ask")send(P);
+}
+const SYS=()=>`You are Nova, a friendly, patient, encouraging AI tutor for UK GCSE students (never rude or judgmental). MAIN RULE: explain as simply as you would to a 5-year-old (very simple words, a short example, an analogy, helpful emojis) while keeping the GCSE facts correct. Use UK spelling. Keep replies short. After explaining, offer a more advanced GCSE-level explanation. When quizzing: ask ONE question at a time and wait; after the answer reply "✅ Correct!" or "❌ Not quite!" with a simple explanation, then the next question. After 10 questions show "Score: x/10", "Grade estimate: n" (GCSE 1-9) and "Topics to revise:" as a list. ${exam?"EXAM MODE IS ON: ask GCSE-style exam questions showing marks available, then mark the student's answer like an examiner with a short mark scheme and one improvement tip.":""}`;
+const CHIPS=[["Explain simpler 🧸","Explain that again, even simpler."],["Explain at GCSE level 🎓","Now explain it at proper GCSE level with the key terms."],["Give me an example 💡","Give me a simple example."],["Quiz me 🧠","Quiz me on this topic, one question at a time."],["Explain it like I'm 5","Explain the topic we're discussing like I'm 5."]];
+function buddy(){
+  return `<h2 style="margin-top:.5rem">Nova</h2><p class="mute" style="margin-top:-.6rem">Your friendly study helper</p>
+  <div class="card"><div class="chat" id="chat">${msgs.length?msgs.map(m=>`<div class="m ${m.role==="user"?"u":"s"}">${md(m.content)}</div>`).join(""):`<div class="m s">Hi ${esc(S.name)}! 👋 I'm Nova. Ask me anything about your GCSEs and I'll make it super easy. You've got this! 💪</div>`}</div>
+  <div style="margin-top:.8rem">${CHIPS.map((c,i)=>`<button class="chip" onclick="send(CHIPS[${i}][1])">${c[0]}</button>`).join("")}
+  <button class="chip ${exam?"on":""}" onclick="exam=!exam;render()">📝 Exam Mode ${exam?"on":"off"}</button></div>
+  <form class="in" onsubmit="event.preventDefault();const i=this.q;send(i.value);i.value=''"><input name="q" type="text" placeholder="Ask a GCSE question, e.g. What is photosynthesis?" aria-label="Ask Nova" autocomplete="off"><button class="btn p" style="margin:0">Send</button></form></div>`;
+}
+function scrollChat(){const c=$("#chat");if(c)c.scrollTop=c.scrollHeight}
+async function getSample(){if(sample)return sample;try{sample=await claude.use("sample")}catch(e){sample=null}return sample}
+async function send(text){
+  text=(text||"").trim();if(!text||busy)return;
+  if(view!=="buddy")go("buddy");
+  msgs.push({role:"user",content:text});S.q++;S.mins+=2;xp(5);if(S.q>=100)unlock("q100");if(S.xp>=5000)unlock("ready");save();
+  msgs.push({role:"assistant",content:"Thinking… 🤔"});render();busy=true;
+  const reply=()=>{const el=document.querySelectorAll("#chat .m");const e=el[el.length-1];if(e){e.innerHTML=md(msgs[msgs.length-1].content);scrollChat()}};
+  try{
+    if(!await getSample())throw {code:"none"};
+    const turns=msgs.slice(0,-1).slice(-12).map(m=>({role:m.role,content:m.content}));
+    while(turns[0].role!=="user")turns.shift();
+    turns[0].content=SYS()+"\n\nStudent: "+turns[0].content;
+    const r=await sample(turns,{cache:false,onText:({text})=>{msgs[msgs.length-1].content=text;reply()}});
+    msgs[msgs.length-1].content=r.text;
+    if(/Score:\s*10\s*\/\s*10/.test(r.text))unlock("perfect");
+  }catch(e){
+    msgs[msgs.length-1].content=/photosynthesis/i.test(text)?"Okay, let's make it super easy! 🌱\nPlants are tiny food factories! They use sunlight ☀️, water 💧 and carbon dioxide 🌬️ to make glucose 🍬 (their food) and oxygen.\n**Light + Water + Carbon dioxide → Glucose + Oxygen**\nThat's photosynthesis! Want a GCSE-level version?":e.code==="rate_limited"?"Whoa, slow down a little! 😊 Try again in a moment.":e.code==="not_granted"?"Nova needs your permission to answer. Tap Allow when asked, then try again.":"Nova isn't available in this view. Open the link while signed in to claude.ai, tap Allow if asked, then try again.";
+  }
+  busy=false;reply();render();
+}
+function planner(){
+  return `<h2 style="margin-top:.5rem">📅 Revision Planner</h2><div class="card"><p class="mute" style="margin-top:0">Tell Nova what you've got coming up and it will build a simple weekly plan.</p>
+  <label>Exam dates<textarea id="pe" rows="3" placeholder="e.g. Maths 12 June, Biology 16 June">${esc(S.exams||"")}</textarea></label><br><br>
+  <label>Topics I struggle with<textarea id="pw" rows="2" placeholder="e.g. Algebra, Bonding, Macbeth">${esc(S.weak||"")}</textarea></label><br><br>
+  <label>Minutes I can revise each day<input id="pm" type="number" min="10" max="300" value="${S.pmin||45}"></label><br><br>
+  <button class="btn p" onclick="plan()" style="margin:0">Make my plan ✨</button></div><div class="card" id="plan" style="margin-top:1rem">${S.plan?md(S.plan):"<span class=mute>Your plan will appear here.</span>"}</div>`;
+}
+async function plan(){
+  S.exams=$("#pe").value;S.weak=$("#pw").value;S.pmin=+$("#pm").value||45;save();
+  const out=$("#plan");out.textContent="Building your plan… ✨";
+  try{
+    if(!await getSample())throw 0;
+    const r=await sample(`You are Nova, a friendly GCSE tutor. Build a simple 7-day revision timetable (Monday to Sunday) for a UK GCSE student. Subjects they take: ${S.sel.map(i=>sub(i)[2]).join(", ")}. Exam dates: ${S.exams||"not given"}. Topics they struggle with (prioritise these, and put sooner exams first): ${S.weak||"not given"}. Time available each day: ${S.pmin} minutes. Format each day as: "**Monday**" then lines like "🧮 Maths — Algebra — 30 mins". Include a short break each day and end with one encouraging sentence. Plain text only.`,{cache:false,onText:({text})=>{out.innerHTML=md(text)}});
+    S.plan=r.text;xp(20);save();out.innerHTML=md(r.text);
+  }catch(e){out.textContent="I couldn't build the plan just now. Check Claude access is switched on for this page and try again."}
+}
+function awards(){
+  const lvl=Math.floor(S.xp/500)+1,w=Math.min(100,Math.round(S.q%50/50*100));
+  return `<h2 style="margin-top:.5rem">Level ${lvl} 🚀</h2><div class="card">${S.xp.toLocaleString("en-GB")} XP<div class="bar"><i style="width:${S.xp%500/5}%"></i></div><span class="mute">${500-S.xp%500} XP to level ${lvl+1}</span></div>
+  <h2>Achievements</h2><div class="grid">${AWARDS.map(a=>`<div class="card stat ach ${S.ach[a[0]]?"on":""}">${a[1]}<small>${a[2]}</small></div>`).join("")}</div>
+  <h2>Weekly challenge</h2><div class="card">Answer 50 questions with Nova<div class="bar"><i style="width:${w}%"></i></div><span class="mute">${S.q%50}/50</span></div>`;
+}
+try{const c0=st.get("gx_cur");if(c0&&JSON.parse(st.get("gx_users")||"{}")[c0.toLowerCase()])begin(c0)}catch(e){}
+render();
+(async()=>{try{sample=await claude.use("sample")}catch(e){sample=null}})();
+</script>
+</body>
+</html>
